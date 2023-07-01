@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Custom Middlewares
-app.use('/v1/api', authenticateToken);
+// app.use('/v1/api', authenticateToken); //TODO: Uncomment this line to enable authentication
 app.use('/v1/api', searchInRedis);
 
 apiEndpoints(app);

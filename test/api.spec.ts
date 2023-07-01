@@ -1,10 +1,9 @@
 // import request from 'supertest';
-// import dotenv from 'dotenv';
+// import 'dotenv/config'
 // import jwt from 'jsonwebtoken';
 
 // import app from '../src/configs/app';
 
-// dotenv.config();
 
 // describe('Auth Endpoint', () => {
 //   it('should return a valid token for valid credentials', async () => {

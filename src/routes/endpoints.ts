@@ -1,18 +1,17 @@
 import {
   Application, Request, Response,
 } from 'express';
-import dotenv from 'dotenv';
+import 'dotenv/config'
 import auth from '../controllers/auth';
-import findAllPersonData from '../controllers/u';
+import users from '../controllers/users';
 
-dotenv.config();
 
 const endpoints = (app: Application): void => {
   // Auth
   app.post('/v1/auth', (req: Request, res: Response) => auth(req, res));
 
   // Other endpoints
-  // app.get('/v1/api/person', async (req: Request, res: Response) => findAllPersonData(req, res));
+  app.get('/v1/api/users', async (req: Request, res: Response) => users(req, res));
 };
 
 export default endpoints;
