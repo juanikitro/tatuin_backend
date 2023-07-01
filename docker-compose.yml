@@ -1,0 +1,36 @@
+version: '3'
+services:
+    api_dev:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        restart: always
+        network_mode: host
+        ports:
+            - 3000:3000
+        env_file:
+            - .env
+        volumes:
+            - ./src:/app/src
+            - ./global.d.ts:/app/global.d.ts
+        command: npm run dev
+        depends_on:
+            - redis
+            - mariadb
+
+    redis:
+        image: redis:latest
+        ports:
+            - 6378:6379
+        restart: always
+        volumes: 
+            - ./cache:/data
+
+    mariadb:
+        image: mariadb:latest
+        restart: always
+        env_file:
+            - .env
+        ports:
+        - "3306:3306"
+
