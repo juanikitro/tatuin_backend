@@ -19,7 +19,7 @@ services:
             - mariadb
 
     redis:
-        image: redis:latest
+        image: redis:7.2-rc3
         ports:
             - 6378:6379
         restart: always
@@ -27,7 +27,7 @@ services:
             - ./cache:/data
 
     mariadb:
-        image: mariadb:latest
+        image: mariadb:11.1.1-rc-jammy
         restart: always
         env_file:
             - .env
