@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm'
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm'
+import { UserDetail } from './UserDetail'
 
 @Entity()
 export class User {
@@ -6,8 +7,13 @@ export class User {
     userId!: number
 
     @Column()
-    userName!: string
+    username!: string
 
     @Column()
     email!: string
+
+    @OneToOne(() => UserDetail, userDetail => userDetail.userId, { cascade: true })
+    @JoinColumn()
+    userDetailId!: UserDetail;
 }
+

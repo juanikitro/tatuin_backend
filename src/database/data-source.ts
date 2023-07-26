@@ -1,6 +1,7 @@
 import 'reflect-metadata'
 import { DataSource } from 'typeorm'
 import { User } from '../entity/User'
+import { UserDetail } from '../entity/UserDetail'
 import 'dotenv/config'
 
 export const MariaDb = new DataSource({
@@ -12,7 +13,7 @@ export const MariaDb = new DataSource({
     database: process.env.MYSQL_DATABASE,
     synchronize: true,
     logging: true,
-    entities: [User],
+    entities: [User, UserDetail],
     migrations: [],
     subscribers: [],
 })
