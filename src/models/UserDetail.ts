@@ -6,16 +6,24 @@ export class UserDetail {
     @PrimaryGeneratedColumn()
     userDetailId!: number;
 
-    @Column()
+    @Column({
+        nullable: true
+    })
     firstName!: string;
 
-    @Column()
+    @Column({
+        nullable: true
+    })
     lastName!: string;
 
-    @Column()
+    @Column({
+        nullable: true
+    })
     dni!: string;
 
-    @Column()
+    @Column({
+        nullable: true
+    })
     birthday!: string;
 
     @OneToOne(() => User, user => user.userDetailId)

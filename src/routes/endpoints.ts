@@ -1,17 +1,32 @@
 import {
   Application, Request, Response,
 } from 'express';
+import passport from 'passport';
 import 'dotenv/config'
-import auth from '../controllers/auth';
-import users from '../controllers/users';
+
+import { getAllUsers, createUser } from '../controllers/users';
+import { createToken } from '../controllers/createToken';
 
 
 const endpoints = (app: Application): void => {
-  // Auth
-  app.post('/v1/auth', (req: Request, res: Response) => auth(req, res));
+  // Users
+  app.post('/v1/api/user', (req: Request, res: Response) => createUser(req, res));
+  app.get('/v1/api/users', async (req: Request, res: Response) => getAllUsers(req, res));
 
-  // Other endpoints
-  app.get('/v1/api/users', async (req: Request, res: Response) => users(req, res));
+  // Auth
+  app.get('/v1/auth/google', passport.authenticate('google', {
+    scope: ['profile', 'email']
+  }));
+
+  app.get('/v1/auth/google/callback',
+    passport.authenticate('google', { failureRedirect: '/login' }),
+    (req, res) => {
+      if (req.user) {
+        return createToken(req, res)
+      } else {
+        res.status(401).send('You must log in');
+      }
+    });
 };
 
 export default endpoints;

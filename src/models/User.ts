@@ -7,9 +7,14 @@ export class User {
     userId!: number
 
     @Column()
-    username!: string
+    googleId!: string
 
     @Column()
+    username!: string
+
+    @Column({
+        nullable: true
+    })
     email!: string
 
     @OneToOne(() => UserDetail, userDetail => userDetail.userId, { cascade: true })

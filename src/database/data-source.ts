@@ -1,7 +1,7 @@
 import 'reflect-metadata'
 import { DataSource } from 'typeorm'
-import { User } from '../entity/User'
-import { UserDetail } from '../entity/UserDetail'
+import { User } from '../models/User'
+import { UserDetail } from '../models/UserDetail'
 import 'dotenv/config'
 
 export const MariaDb = new DataSource({
