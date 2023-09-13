@@ -22,10 +22,12 @@ const endpoints = (app: Application): void => {
     passport.authenticate('google', { failureRedirect: '/login' }),
     (req, res) => {
       if (req.user) {
-        return createToken(req, res)
-      } else {
-        res.status(401).send('You must log in');
+        return res.status(200).send({
+          user: req.user,
+          token: createToken(req)
+        });
       }
+      return res.status(401).send('You must log in');
     });
 };
 

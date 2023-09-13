@@ -8,9 +8,9 @@ import jwt from 'jsonwebtoken';
  * @param {Response} res
  * @returns If credentials are ok, it returns a status code of 200. If not, a status code of 401 with the message "Unauthorized".
  */
-function createToken(req: Request, res: Response): Response {
+function createToken(req: Request): string {
   const token = jwt.sign({ user: req.user }, process.env.JWT_SECRET_KEY ?? 'd3f4ult_s3cr3t_k3y', { expiresIn: process.env.TOKEN_EXPIRATION_TIME ?? '1h' });
-  return res.status(200).send(token);
+  return token
 }
 
 export { createToken };
