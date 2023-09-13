@@ -2,11 +2,14 @@ import { Request, Response } from 'express';
 import cacheResponse from '../services/cacheResponse';
 import MariaDb from '../configs/db_connection';
 import { User } from '../models/User';
-import { UserDetail } from '../models/UserDetail';
 
 async function getAllUsers(req: Request, res: Response) {
   try {
-    const response = await MariaDb.getRepository(User).find();
+    const response = await MariaDb.getRepository(User).find({
+      relations: {
+        userDetailId: true,
+      },
+    });
 
     cacheResponse(JSON.stringify(req.body), response);
 
@@ -16,27 +19,38 @@ async function getAllUsers(req: Request, res: Response) {
   }
 }
 
-async function createUser(req: Request, res: Response) {
+async function editUser(req: Request, res: Response) {
   try {
-    let userDetail = {
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      dni: req.body.dni,
-      birthday: req.body.birthday,
-    }
-    userDetail = await MariaDb.getRepository(UserDetail).save(userDetail);
+    let userToModify = await MariaDb.getRepository(User).findOne({
+      where: {
+        userId: Number(req.params.userId)
+      },
+      relations: {
+        userDetailId: true,
+      },
+    },)
 
-    let user = {
-      username: req.body.username,
-      email: req.body.email,
-      userDetailId: userDetail
-    }
-    user = await MariaDb.getRepository(User).save(user);
+    if (userToModify && req.body) {
+      userToModify.username = req.body.username ?? userToModify.username;
+      userToModify.email = req.body.email ?? userToModify.email;
 
-    return res.status(200).send(user);
+      if (userToModify.userDetailId) {
+        userToModify.userDetailId.firstName = req.body.firstName ?? userToModify.userDetailId.firstName;
+        userToModify.userDetailId.lastName = req.body.lastName ?? userToModify.userDetailId.lastName;
+        userToModify.userDetailId.dni = req.body.dni ?? userToModify.userDetailId.dni;
+        userToModify.userDetailId.birthday = req.body.birthday ?? userToModify.userDetailId.birthday;
+      }
+
+      userToModify = await MariaDb.getRepository(User).save(userToModify);
+
+      return res.status(200).send(userToModify);
+    }
+
+    return res.status(404).send('User not found');
   } catch (error) {
+    console.error(error)
     return res.status(500).send(error);
   }
 }
 
-export { getAllUsers, createUser };
+export { getAllUsers, editUser };

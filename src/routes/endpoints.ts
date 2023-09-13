@@ -4,14 +4,14 @@ import {
 import passport from 'passport';
 import 'dotenv/config'
 
-import { getAllUsers, createUser } from '../controllers/users';
+import { getAllUsers, editUser } from '../controllers/users';
 import { createToken } from '../controllers/createToken';
 
 
 const endpoints = (app: Application): void => {
   // Users
-  app.post('/v1/api/user', (req: Request, res: Response) => createUser(req, res));
   app.get('/v1/api/users', async (req: Request, res: Response) => getAllUsers(req, res));
+  app.patch('/v1/api/user/:userId', (req: Request, res: Response) => editUser(req, res));
 
   // Auth
   app.get('/v1/auth/google', passport.authenticate('google', {
