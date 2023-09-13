@@ -20,21 +20,22 @@ function setUpGoogleAuth() {
                 if (existingUser) {
                     return done(null, existingUser);
                 } else {
-                    //TODO: Luego de la creacion del usuario, se deben modificar obligatoriamente por el front los valores vacios
                     const userDetail = userDetailRepo.create({
                         firstName: profile.name ? profile.name.givenName : '',
                         lastName: profile.name ? profile.name.familyName : '',
                         dni: '',
                         birthday: '',
                     });
+                    await userDetailRepo.save(userDetail);
+
                     const user = userRepo.create({
                         googleId: profile.id,
                         username: `${userDetail.firstName} ${userDetail.lastName}`,
                         email: profile.emails ? profile.emails[0].value : '',
                         userDetailId: userDetail
                     });
-
                     await userRepo.save(user);
+
                     done(null, user);
                 }
             } catch (error) {
