@@ -3,6 +3,7 @@ import { DataSource } from 'typeorm'
 import { User } from '../models/User'
 import { UserDetail } from '../models/UserDetail'
 import 'dotenv/config'
+import { SellerDetail } from '../models/SellerDetail'
 
 export const MariaDb = new DataSource({
     type: 'mariadb',
@@ -13,7 +14,7 @@ export const MariaDb = new DataSource({
     database: process.env.MYSQL_DATABASE,
     synchronize: true,
     logging: true,
-    entities: [User, UserDetail],
+    entities: [User, UserDetail, SellerDetail],
     migrations: [],
     subscribers: [],
 })

@@ -17,7 +17,7 @@ export class User {
     })
     email!: string
 
-    @OneToOne(() => UserDetail, (userDetail: { userId: number }) => userDetail.userId, { cascade: true })
+    @OneToOne(() => UserDetail, (userDetail: { userId: number }) => userDetail.userId, { cascade: true, eager: true })
     @JoinColumn()
     userDetailId!: UserDetail;
 }
