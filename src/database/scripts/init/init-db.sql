@@ -1,0 +1,2 @@
+GRANT SELECT, INSERT, UPDATE ON tatuin_database.* TO 'tatuinuser'@'%' WITH GRANT OPTION;
+FLUSH PRIVILEGES;

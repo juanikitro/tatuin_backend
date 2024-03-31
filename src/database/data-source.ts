@@ -7,7 +7,7 @@ import { SellerDetail } from '../models/SellerDetail'
 
 export const MariaDb = new DataSource({
     type: 'mariadb',
-    host: 'localhost',
+    host: process.env.MYSQL_ADDRESS,
     port: 3306,
     username: process.env.MYSQL_USER ?? 'test',
     password: process.env.MYSQL_PASSWORD ?? 'test',
