@@ -1,5 +1,5 @@
-import MariaDb from '../configs/db_connection';
-import { User } from '../models/User';
+import MariaDb from '../database/connection';
+import { User } from '../models/user/User';
 
 export async function getUserById(userId: number) {
     return await MariaDb.getRepository(User).findOne({

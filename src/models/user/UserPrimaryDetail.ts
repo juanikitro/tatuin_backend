@@ -6,7 +6,7 @@ import {
     JoinColumn,
 } from 'typeorm'
 import { User } from './User'
-import { SellerDetail } from './UserSellerDetail'
+import { SellerDetail } from './SellerDetail'
 
 @Entity()
 export class UserPrimaryDetail {
