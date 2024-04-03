@@ -1,11 +1,10 @@
 version: '3'
 services:
-    api_dev:
+    nest_service:
         build:
             context: .
             dockerfile: Dockerfile
         restart: always
-        network_mode: host
         env_file:
             - .env
         volumes:
@@ -13,19 +12,21 @@ services:
             - ./global.d.ts:/app/global.d.ts
         command: npm run dev
         depends_on:
-            - redis
+            - redis_service
+        ports:
+            - "3000:3000"
 
-    redis:
+    redis_service:
         image: redis:7.2-rc3
         ports:
-            - 6378:6379
+            - 6379:6379
         restart: always
         volumes: 
             - ./cache:/data
         depends_on:
-            - mariadb
+            - mariadb_service
 
-    mariadb:
+    mariadb_service:
         image: mariadb:11.1.1-rc-jammy
         restart: always
         env_file:
