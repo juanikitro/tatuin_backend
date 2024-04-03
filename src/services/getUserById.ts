@@ -5,8 +5,8 @@ export async function getUserById(userId: number) {
     return await MariaDb.getRepository(User).findOne({
         where: { userId },
         relations: {
-            userDetailId: {
-                sellerDetailId: true
+            userPrimaryDetail: {
+                sellerDetail: true
             },
         },
     });

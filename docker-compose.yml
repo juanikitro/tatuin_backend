@@ -13,6 +13,7 @@ services:
         command: npm run dev
         depends_on:
             - redis_service
+            - mariadb_service
         ports:
             - "3000:3000"
 
@@ -22,9 +23,7 @@ services:
             - 6379:6379
         restart: always
         volumes: 
-            - ./cache:/data
-        depends_on:
-            - mariadb_service
+            - ./volumes/redis_cache:/data
 
     mariadb_service:
         image: mariadb:11.1.1-rc-jammy
@@ -35,3 +34,4 @@ services:
             - "3306:3306"
         volumes:
             - ./src/database/scripts/init/:/docker-entrypoint-initdb.d
+            - ./volumes/mariadb_data:/var/lib/mysql

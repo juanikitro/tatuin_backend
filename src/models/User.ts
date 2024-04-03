@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm'
-import { UserDetail } from './UserDetail'
+import { UserPrimaryDetail } from './UserPrimaryDetail'
 
 @Entity()
 export class User {
@@ -17,8 +17,8 @@ export class User {
     })
     email!: string
 
-    @OneToOne(() => UserDetail, (userDetail: { userId: number }) => userDetail.userId, { cascade: true, eager: true })
+    @OneToOne(() => UserPrimaryDetail, (userDetail: { userId: number }) => userDetail.userId, { cascade: true, eager: true })
     @JoinColumn()
-    userDetailId!: UserDetail;
+    userPrimaryDetail!: UserPrimaryDetail;
 }
 

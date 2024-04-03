@@ -2,7 +2,7 @@ import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { User } from '../models/User';
 import MariaDb from '../configs/db_connection';
-import { UserDetail } from '../models/UserDetail';
+import { UserPrimaryDetail } from '../models/UserPrimaryDetail';
 
 function setUpGoogleAuth() {
     passport.use(new GoogleStrategy({
@@ -13,7 +13,7 @@ function setUpGoogleAuth() {
         async (accessToken, refreshToken, profile, done) => {
             try {
                 const userRepo = MariaDb.getRepository(User);
-                const userDetailRepo = MariaDb.getRepository(UserDetail);
+                const userDetailRepo = MariaDb.getRepository(UserPrimaryDetail);
 
                 const existingUser = await userRepo.findOneBy({ googleId: profile.id });
 
@@ -32,7 +32,7 @@ function setUpGoogleAuth() {
                         googleId: profile.id,
                         username: `${userDetail.firstName} ${userDetail.lastName}`,
                         email: profile.emails ? profile.emails[0].value : '',
-                        userDetailId: userDetail
+                        userPrimaryDetail: userDetail
                     });
                     await userRepo.save(user);
 

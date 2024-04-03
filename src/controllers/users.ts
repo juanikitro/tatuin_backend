@@ -2,14 +2,14 @@ import { Request, Response } from 'express';
 import cacheResponse from '../services/cacheResponse';
 import MariaDb from '../configs/db_connection';
 import { User } from '../models/User';
-import { SellerDetail } from '../models/SellerDetail';
+import { SellerDetail } from '../models/UserSellerDetail';
 import { getUserById } from '../services/getUserById';
 
 async function getAllUsers(req: Request, res: Response) {
   try {
     const response = await MariaDb.getRepository(User).find({
       relations: {
-        userDetailId: true,
+        userPrimaryDetail: true,
       },
     });
 
@@ -62,11 +62,11 @@ async function editUser(req: Request, res: Response) {
       userToModify.username = req.body.username ?? userToModify.username;
       userToModify.email = req.body.email ?? userToModify.email;
 
-      if (userToModify.userDetailId) {
-        userToModify.userDetailId.firstName = req.body.firstName ?? userToModify.userDetailId.firstName;
-        userToModify.userDetailId.lastName = req.body.lastName ?? userToModify.userDetailId.lastName;
-        userToModify.userDetailId.dni = req.body.dni ?? userToModify.userDetailId.dni;
-        userToModify.userDetailId.birthday = req.body.birthday ?? userToModify.userDetailId.birthday;
+      if (userToModify.userPrimaryDetail) {
+        userToModify.userPrimaryDetail.firstName = req.body.firstName ?? userToModify.userPrimaryDetail.firstName;
+        userToModify.userPrimaryDetail.lastName = req.body.lastName ?? userToModify.userPrimaryDetail.lastName;
+        userToModify.userPrimaryDetail.dni = req.body.dni ?? userToModify.userPrimaryDetail.dni;
+        userToModify.userPrimaryDetail.birthday = req.body.birthday ?? userToModify.userPrimaryDetail.birthday;
       }
 
       userToModify = await MariaDb.getRepository(User).save(userToModify);
@@ -89,15 +89,15 @@ async function createNewSeller(req: Request, res: Response) {
       return res.status(404).send(`The endpoint requires more params`);
     }
 
-    if (newSeller && newSeller?.userDetailId.seller === true) {
+    if (newSeller && newSeller?.userPrimaryDetail.seller === true) {
       return res.status(404).send(`User ${req.params.userId} already is seller`);
     }
 
     if (newSeller) {
-      if (newSeller.userDetailId) {
+      if (newSeller.userPrimaryDetail) {
         const sellerDetailRepo = MariaDb.getRepository(SellerDetail);
-        const sellerDetail = sellerDetailRepo.create({
-          userDetailId: newSeller.userDetailId,
+        const userSellerDetail = sellerDetailRepo.create({
+          userPrimaryDetail: newSeller.userPrimaryDetail,
           legalName: req.body.legalName,
           phoneNumber: req.body.phoneNumber,
           address: req.body.address,
@@ -105,10 +105,10 @@ async function createNewSeller(req: Request, res: Response) {
           media: req.body.media,
           status: req.body.status,
         })
-        await sellerDetailRepo.save(sellerDetail)
+        await sellerDetailRepo.save(userSellerDetail)
 
-        newSeller.userDetailId.seller = true;
-        newSeller.userDetailId.sellerDetailId = sellerDetail;
+        newSeller.userPrimaryDetail.seller = true;
+        newSeller.userPrimaryDetail.sellerDetail = userSellerDetail;
 
         const response = await MariaDb.getRepository(User).save(newSeller);
 
@@ -117,7 +117,7 @@ async function createNewSeller(req: Request, res: Response) {
         return res.status(200).send(response);
       }
 
-      return res.status(404).send(`userDetailId ${newSeller.userDetailId} from user ${req.params.userId} not found`);
+      return res.status(404).send(`userPrimaryDetailId ${newSeller.userPrimaryDetail} from user ${req.params.userId} not found`);
     }
 
     return res.status(404).send(`User ${req.params.userId} not found`);

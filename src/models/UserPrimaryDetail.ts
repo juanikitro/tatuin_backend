@@ -1,42 +1,52 @@
-// import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm'
-// import { User } from './User'
-// import { UserSellerDetail } from './UserSellerDetail'
+import {
+    Entity,
+    Column,
+    PrimaryGeneratedColumn,
+    OneToOne,
+    JoinColumn,
+} from 'typeorm'
+import { User } from './User'
+import { SellerDetail } from './UserSellerDetail'
 
-// @Entity()
-// export class UserPrimaryDetail {
-//     @PrimaryGeneratedColumn()
-//     userPrimaryDetailId!: number;
+@Entity()
+export class UserPrimaryDetail {
+    @PrimaryGeneratedColumn()
+    userPrimaryDetailId!: number
 
-//     @OneToOne(() => User, user => user.userPrimaryDetailId)
-//     userId!: User;
+    @OneToOne(() => User, (user) => user.userPrimaryDetail)
+    userId!: User
 
-//     @Column({
-//         nullable: true
-//     })
-//     firstName!: string;
+    @Column({
+        nullable: true,
+    })
+    firstName!: string
 
-//     @Column({
-//         nullable: true
-//     })
-//     lastName!: string;
+    @Column({
+        nullable: true,
+    })
+    lastName!: string
 
-//     @Column({
-//         nullable: true
-//     })
-//     dni!: string;
+    @Column({
+        nullable: true,
+    })
+    dni!: string
 
-//     @Column({
-//         nullable: true
-//     })
-//     birthday!: string;
+    @Column({
+        nullable: true,
+    })
+    birthday!: string
 
-//     @Column({
-//         nullable: false,
-//         default: 0
-//     })
-//     seller!: boolean
+    @Column({
+        nullable: false,
+        default: 0,
+    })
+    seller!: boolean
 
-//     @OneToOne(() => UserSellerDetail, userSellerDetail => userSellerDetail.userPrimaryDetailId, { cascade: true, eager: true })
-//     @JoinColumn({ name: 'userSellerDetailId' })
-//     userSellerDetailId!: UserSellerDetail;
-// }
+    @OneToOne(
+        () => SellerDetail,
+        (userSellerDetail) => userSellerDetail.userPrimaryDetail,
+        { cascade: true, eager: true }
+    )
+    @JoinColumn({ name: 'sellerDetail' })
+    sellerDetail!: SellerDetail
+}

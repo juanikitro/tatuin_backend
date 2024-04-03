@@ -1,4 +1,4 @@
-import { MariaDb } from '../database/data-source';
+import { MariaDb } from '../database/mariadb';
 
 MariaDb
     .initialize()
